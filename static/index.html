@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOLO Object Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        #videoElement {
+            width: 640px;
+            height: 480px;
+            background-color: #666;
+            margin: 20px 0;
+        }
+        #resultImage {
+            max-width: 640px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>YOLO Object Detection</h1>
+    <video id="videoElement" autoplay></video>
+    <div>
+        <button onclick="captureAndDetect()">Capture & Detect</button>
+    </div>
+    <img id="resultImage" style="display: none;">
+
+    <script>
+        const video = document.getElementById('videoElement');
+        const resultImage = document.getElementById('resultImage');
+
+        // Access the camera
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    video.srcObject = stream;
+                })
+                .catch(function (error) {
+                    console.log("Error accessing camera: ", error);
+                });
+        }
+
+        function captureAndDetect() {
+            // Create a canvas to capture the video frame
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert canvas to blob
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('file', blob, 'image.jpg');
+
+                try {
+                    const response = await fetch('/detect', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    
+                    // Display the result
+                    resultImage.src = 'data:image/jpeg;base64,' + data.image;
+                    resultImage.style.display = 'block';
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }, 'image/jpeg');
+        }
+    </script>
+</body>
+</html> 
