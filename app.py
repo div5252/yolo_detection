@@ -50,7 +50,3 @@ async def detect_objects(file: UploadFile = File(...)):
     img_str = base64.b64encode(buffered.getvalue()).decode()
     
     return {"image": img_str}
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000) 
