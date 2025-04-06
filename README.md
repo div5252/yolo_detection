@@ -25,7 +25,7 @@ pip install -r requirements.txt
 
 3. Run the application:
 ```bash
-python app.py
+uvicorn app:app --reload
 ```
 
 4. Open your web browser and navigate to:
@@ -39,16 +39,6 @@ http://localhost:8000
 2. Click the "Capture & Detect" button to take a photo and run object detection
 3. The detected objects will be displayed with bounding boxes and labels
 
-## Cloud Deployment
-
-To deploy this application to the cloud:
-
-1. Choose a cloud provider (e.g., AWS, Google Cloud, or Azure)
-2. Create a virtual machine or container instance
-3. Install the required dependencies
-4. Run the application with appropriate security settings
-5. Configure your domain and SSL certificates if needed
-
 ## Performance Optimization
 
 The application uses YOLOv8n (nano) model for better performance. For even better performance, you can:
@@ -57,11 +47,3 @@ The application uses YOLOv8n (nano) model for better performance. For even bette
 2. Implement caching for frequently detected objects
 3. Optimize image resolution based on your needs
 4. Use a CDN for static file delivery
-
-## Security Considerations
-
-- Always use HTTPS in production
-- Implement rate limiting
-- Add authentication if needed
-- Keep dependencies updated
-- Use environment variables for sensitive information 
