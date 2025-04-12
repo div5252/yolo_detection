@@ -11,15 +11,19 @@ import os
 
 app = FastAPI()
 
+model = 'yolov8n'
+
 # Check if ONNX model exists, if not convert from PyTorch
-if not os.path.exists('yolov8n.onnx'):
-    print("Converting YOLO model to ONNX format...")
-    model = YOLO('yolov8n.pt')
-    model.export(format='onnx', imgsz=640, half=True)
-    print("Conversion complete!")
+# if not os.path.exists(f'{model}.onnx'):
+#     print("Converting YOLO model to ONNX format...")
+#     model = YOLO(f'{model}.pt')
+#     model.export(format='onnx', imgsz=640, half=True)
+#     print("Conversion complete!")
 
 # Load the ONNX model
-model = YOLO('yolov8n.onnx')
+# model = YOLO(f'{model}.onnx')
+
+model = YOLO('vacuum_best.pt')
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
